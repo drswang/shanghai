@@ -1,6 +1,6 @@
 """
-Comparison figure: Old ctrl (update2) vs New ctrl (new_postproc1/infil_7_890_rain)
-2 rows × 4 columns — same 4 timesteps as Fig_Overview panels b–e.
+Comparison figure: Old/New ctrl and Old/New no-rain-#1
+4 rows × 4 columns — same 4 timesteps as Fig_Overview panels b–e.
 
 Timestep mapping (verified by depth-value correlation against original fig files):
   t49  → Predecessor Rain #1  (Aug 21 00:00, corr=0.988 vs fig3a.xyz)
@@ -33,12 +33,14 @@ RIVER_MASK  = f"{BASE}/river_mask.xyz"
 
 OLD_CTRL    = f"{BASE}/update2/ctrl/text"
 NEW_CTRL    = f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text"
+OLD_NR1     = f"{BASE}/update2/norain1/text"
+NEW_NR1     = f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text"
 
 TIMESTEPS   = [49, 90, 275, 357]
 COL_TITLES  = ["Predecessor\nRain #1", "Predecessor\nRain #2",
                "Before\nTyphoon Impact", "After\nTyphoon Impact"]
 PANEL_LABELS = ["b", "c", "d", "e"]
-ROW_LABELS  = ["Old ctrl", "New ctrl"]
+ROW_LABELS  = ["Old ctrl", "New ctrl", "Old no rain #1", "New no rain #1"]
 
 # ── Static layers ──────────────────────────────────────────────────────────
 print("Loading static layers…")
@@ -139,10 +141,15 @@ RIVERS_TO_SHOW = ["黄浦江", "苏州河", "蕴藻浜", "淀浦河", "太浦河
 shanghai_main_3857 = shanghai_main.to_crs(epsg=3857)
 
 # ── Figure layout ──────────────────────────────────────────────────────────
-fig, axes = plt.subplots(2, 4, figsize=(14, 7), dpi=300)
+fig, axes = plt.subplots(4, 4, figsize=(14, 14), dpi=300)
 fig.subplots_adjust(wspace=0.05, hspace=0.08)
 
-scenarios = [(OLD_CTRL, "Old ctrl"), (NEW_CTRL, "New ctrl")]
+scenarios = [
+    (OLD_CTRL, "Old ctrl"),
+    (NEW_CTRL, "New ctrl"),
+    (OLD_NR1,  "Old no rain #1"),
+    (NEW_NR1,  "New no rain #1"),
+]
 
 for row_idx, (text_dir, row_label) in enumerate(scenarios):
     for col_idx, (t, col_title) in enumerate(zip(TIMESTEPS, COL_TITLES)):
@@ -179,7 +186,7 @@ for row_idx, (text_dir, row_label) in enumerate(scenarios):
         ax.set_xticklabels([])
         ax.set_yticklabels([])
 
-        show_x = (row_idx == 1)
+        show_x = (row_idx == 3)
         show_y = (col_idx == 0)
         if show_x:
             ax.set_xticklabels(x_labels, fontsize=7)
@@ -203,7 +210,7 @@ for row_idx, (text_dir, row_label) in enumerate(scenarios):
 # ── Shared colorbar ────────────────────────────────────────────────────────
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])
-cbar_ax = fig.add_axes([0.92, 0.12, 0.015, 0.76])
+cbar_ax = fig.add_axes([0.92, 0.06, 0.015, 0.88])
 cbar = fig.colorbar(sm, cax=cbar_ax, ticks=bounds, extend="max")
 cbar.set_label("Water Depth (m)", fontsize=8)
 
@@ -219,9 +226,6 @@ fig.legend(handles=legend_elements, loc="lower center",
            bbox_to_anchor=(0.46, 0.01), ncol=5, fontsize=8, frameon=False)
 
 out_pdf = f"{BASE}/Fig_ctrl_comparison.pdf"
-out_png = f"{BASE}/Fig_ctrl_comparison.png"
 fig.savefig(out_pdf, format="pdf", bbox_inches="tight")
-fig.savefig(out_png, format="png", bbox_inches="tight")
 print(f"Saved: {out_pdf}")
-print(f"Saved: {out_png}")
 plt.close(fig)
