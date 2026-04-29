@@ -1,0 +1,19 @@
+# Large model output directories (several GB each)
+update2/
+postproc/
+trash/
+
+# Video outputs
+*.mp4
+
+# Archives
+*.zip
+
+# Temp Office files
+~$*.pptx
+
+# Python cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
