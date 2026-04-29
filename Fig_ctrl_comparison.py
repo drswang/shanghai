@@ -172,11 +172,12 @@ for row_idx, (text_dir, row_label) in enumerate(scenarios):
 
         # Water depth hexbin
         depth_within = gpd.sjoin(gdf, shanghai_main_3857, how="inner", predicate="within")
-        ax.hexbin(
+        hb = ax.hexbin(
             depth_within.geometry.x, depth_within.geometry.y,
             C=depth_within["depth"], reduce_C_function=np.mean,
-            gridsize=70, cmap=cmap, norm=norm, edgecolors="none"
+            gridsize=70, cmap=cmap, norm=norm, edgecolors="none", linewidths=0
         )
+        hb.set_rasterized(True)
 
         # Extent and ticks
         ax.set_xlim(minx, maxx)
@@ -225,7 +226,7 @@ legend_elements = [
 fig.legend(handles=legend_elements, loc="lower center",
            bbox_to_anchor=(0.46, 0.01), ncol=5, fontsize=8, frameon=False)
 
-out_pdf = f"{BASE}/Fig_ctrl_comparison.pdf"
-fig.savefig(out_pdf, format="pdf", bbox_inches="tight")
-print(f"Saved: {out_pdf}")
+out_png = f"{BASE}/Fig_ctrl_comparison.png"
+fig.savefig(out_png, format="png", bbox_inches="tight")
+print(f"Saved: {out_png}")
 plt.close(fig)
