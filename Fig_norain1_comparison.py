@@ -1,8 +1,8 @@
 """
-3 rows × 4 columns comparison for new_postproc2 simulations.
-  Row 1: new ctrl        (new_postproc1/infil_7_890_rain)
-  Row 2: new no rain #1  (new_postproc2/infil_7_890_rain)
-  Row 3: area54_7_890    (new_postproc2/area54_7_890)
+3 rows × 4 columns comparison.
+  Row 1: proc 1  (new_postproc1/infil_7_890_rain)
+  Row 2: proc 2  (new_postproc2/infil_7_890_rain)
+  Row 3: proc 3  (new_postproc3/infil_7_890_rain)
 
 Timesteps (verified against original fig files by depth correlation):
   t49  → Predecessor Rain #1  (Aug 21 00:00)
@@ -33,14 +33,15 @@ RIVER_DIR  = f"{BASE}/市管河道/"
 RIVER_MASK = f"{BASE}/river_mask.xyz"
 
 SCENARIOS = [
-    (f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text", "New ctrl"),
-    (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "New no rain #1"),
-    (f"{BASE}/postproc/new_postproc2/area54_7_890/text",     "area54_7_890"),
+    (f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text", "proc 1"),
+    (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "proc 2"),
+    (f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text", "proc 3"),
 ]
 
-TIMESTEPS  = [49, 90, 275, 357]
-COL_TITLES = ["Predecessor\nRain #1", "Predecessor\nRain #2",
-              "Before\nTyphoon Impact", "After\nTyphoon Impact"]
+TIMESTEPS   = [49, 90, 275, 357]
+COL_TITLES  = ["Predecessor\nRain #1", "Predecessor\nRain #2",
+               "Before\nTyphoon Impact", "After\nTyphoon Impact"]
+SNAP_TIMES  = ["Aug 21 00:00", "Aug 22 17:00", "Aug 30 10:00", "Sep 02 20:00"]
 PANEL_LABELS = ["b", "c", "d", "e"]
 
 # ── Static layers ──────────────────────────────────────────────────────────
@@ -180,6 +181,9 @@ for row_idx, (text_dir, row_label) in enumerate(SCENARIOS):
 
         ax.text(0.01, 0.98, PANEL_LABELS[col_idx], transform=ax.transAxes,
                 fontsize=10, fontweight="bold", va="top", ha="left")
+        ax.text(0.99, 0.98, SNAP_TIMES[col_idx], transform=ax.transAxes,
+                fontsize=7, va="top", ha="right",
+                bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, ec="none"))
 
         if row_idx == 0:
             ax.set_title(col_title, fontsize=8, pad=4)
