@@ -36,6 +36,7 @@ SCENARIOS = [
     (f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text", "proc 1"),
     (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "proc 2"),
     (f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text", "proc 3"),
+    (f"{BASE}/postproc/new_postproc4/infil_7_890_rain/text", "proc 4"),
 ]
 
 TIMESTEPS   = [49, 90, 275, 357]
