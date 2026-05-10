@@ -232,6 +232,6 @@ fig.legend(handles=legend_elements, loc="lower center",
            bbox_to_anchor=(0.46, 0.01), ncol=5, fontsize=8, frameon=False)
 
 out = f"{BASE}/Fig_Diff_new.png"
-fig.savefig(out, format="png", dpi=200, bbox_inches="tight")
+fig.savefig(out, format="png", dpi=150, bbox_inches="tight")
 print(f"Saved: {out}")
 plt.close(fig)
