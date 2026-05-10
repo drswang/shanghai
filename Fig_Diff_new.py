@@ -1,7 +1,8 @@
 """
-1 row × 2 columns difference figure using new postproc simulations.
+2×2 difference figure using new postproc simulations (bottom-right empty).
   a: proc3 (No Rain #1) − proc1 (CTRL)
   b: proc2 (No Rain #2) − proc1 (CTRL)
+  c: proc4 (No Rain #1+2) − proc1 (CTRL)
 Timestep: t357 (Sep 02 20:00, After Typhoon Impact)
 """
 
@@ -28,9 +29,10 @@ RIVER_DIR = f"{BASE}/市管河道/"
 RIVER_MASK = f"{BASE}/river_mask.xyz"
 T = 357
 
-CTRL_PATH    = f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text/t{T}.xyz"
-NORAIN1_PATH = f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text/t{T}.xyz"  # proc3
-NORAIN2_PATH = f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text/t{T}.xyz"  # proc2
+CTRL_PATH      = f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text/t{T}.xyz"
+NORAIN1_PATH   = f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text/t{T}.xyz"  # proc3
+NORAIN2_PATH   = f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text/t{T}.xyz"  # proc2
+NORAIN12_PATH  = f"{BASE}/postproc/new_postproc4/infil_7_890_rain/text/t{T}.xyz"  # proc4
 
 # ── Static layers ──────────────────────────────────────────────────────────
 print("Loading static layers…")
@@ -90,9 +92,10 @@ def load_xyz(path):
     return clean_outsiders(gdf)
 
 print("Loading simulation data…")
-ctrl_gdf    = load_xyz(CTRL_PATH)
-norain1_gdf = load_xyz(NORAIN1_PATH)
-norain2_gdf = load_xyz(NORAIN2_PATH)
+ctrl_gdf     = load_xyz(CTRL_PATH)
+norain1_gdf  = load_xyz(NORAIN1_PATH)
+norain2_gdf  = load_xyz(NORAIN2_PATH)
+norain12_gdf = load_xyz(NORAIN12_PATH)
 
 # ── Colormap ───────────────────────────────────────────────────────────────
 def shuai_colormap2():
@@ -135,18 +138,23 @@ RIVERS_TO_SHOW    = ["黄浦江", "苏州河", "蕴藻浜", "淀浦河", "太浦
 shanghai_main_3857 = shanghai_main.to_crs(epsg=3857)
 
 # ── Figure ─────────────────────────────────────────────────────────────────
-fig = plt.figure(figsize=(7, 3.5))
-gs  = gridspec.GridSpec(1, 2)
-gs.update(wspace=0.05)
+fig = plt.figure(figsize=(7, 7))
+gs  = gridspec.GridSpec(2, 2)
+gs.update(wspace=0.05, hspace=0.08)
 ax1 = fig.add_subplot(gs[0, 0])
 ax2 = fig.add_subplot(gs[0, 1])
+ax3 = fig.add_subplot(gs[1, 0])
+# gs[1, 1] intentionally left empty
 
 ctrl_within = gpd.sjoin(ctrl_gdf, shanghai_main_3857, how="inner", predicate="within")
 
-for ax, scen_gdf, title, label in [
-    (ax1, norain1_gdf, "No Rain #1 − CTRL", "a"),
-    (ax2, norain2_gdf, "No Rain #2 − CTRL", "b"),
-]:
+panels = [
+    (ax1, norain1_gdf,  "No Rain #1 − CTRL",   "a", True,  True),
+    (ax2, norain2_gdf,  "No Rain #2 − CTRL",   "b", True,  False),
+    (ax3, norain12_gdf, "No Rain #1+2 − CTRL", "c", False, True),
+]
+
+for ax, scen_gdf, title, label, show_x, show_y in panels:
     print(f"  Plotting {title}…")
     圩塘.plot(ax=ax, color="darkgoldenrod", edgecolor="none")
     钦公塘.plot(ax=ax, color="darkgoldenrod", edgecolor="none", lw=2)
@@ -193,9 +201,10 @@ for ax, scen_gdf, title, label in [
     ax.set_ylim(miny, maxy)
     ax.set_xticks(x_ticks_merc)
     ax.set_yticks(y_ticks_merc)
-    ax.set_xticklabels(x_labels, fontsize=7)
-    ax.tick_params(axis="x", rotation=45)
-    ax.set_yticklabels(y_labels if ax is ax1 else [], fontsize=7)
+    ax.set_xticklabels(x_labels if show_x else [], fontsize=7)
+    ax.set_yticklabels(y_labels if show_y else [], fontsize=7)
+    if show_x:
+        ax.tick_params(axis="x", rotation=45)
 
     ax.text(0.01, 0.98, label, transform=ax.transAxes,
             fontsize=10, fontweight="bold", va="top", ha="left")
@@ -204,7 +213,8 @@ for ax, scen_gdf, title, label in [
             bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, ec="none"))
 
 # ── Colorbar ──────────────────────────────────────────────────────────────
-cbar_ax = fig.add_axes([0.92, 0.15, 0.015, 0.75])
+cbar_ax = fig.add_axes([0.92, ax3.get_position().y0, 0.015,
+                         ax1.get_position().y1 - ax3.get_position().y0])
 sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
 sm.set_array([])
 cbar = fig.colorbar(sm, cax=cbar_ax, ticks=bounds, extend="both")
