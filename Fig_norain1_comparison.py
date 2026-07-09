@@ -1,8 +1,10 @@
 """
-3 rows × 4 columns comparison.
+5 rows × 4 columns comparison.
   Row 1: proc 1  (new_postproc1/infil_7_890_rain)
   Row 2: proc 2  (new_postproc2/infil_7_890_rain)
   Row 3: proc 3  (new_postproc3/infil_7_890_rain)
+  Row 4: proc 4  (new_postproc4/infil_7_890_rain)
+  Row 5: proc 5  — no stone  (new_postproc5/infil_7_890_rain)
 
 Timesteps (verified against original fig files by depth correlation):
   t49  → Predecessor Rain #1  (Aug 21 00:00)
@@ -26,9 +28,9 @@ import matplotlib as mpl
 mpl.rcParams.update({"font.size": 8})
 
 # ── Paths ──────────────────────────────────────────────────────────────────
-BASE       = "/Users/shwang/sandbox/shanghai"
+BASE       = "/Users/shuaiwang/sandbox/shanghai"
 SHAPE_DIR  = f"{BASE}/map/1910map/shape"
-GADM_PATH  = "/Users/shwang/sandbox/data/borders/gadm36.shp"
+GADM_PATH  = "/Users/shuaiwang/sandbox/data/borders/gadm36.shp"
 RIVER_DIR  = f"{BASE}/市管河道/"
 RIVER_MASK = f"{BASE}/river_mask.xyz"
 
@@ -37,6 +39,7 @@ SCENARIOS = [
     (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "proc 2"),
     (f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text", "proc 3"),
     (f"{BASE}/postproc/new_postproc4/infil_7_890_rain/text", "proc 4"),
+    (f"{BASE}/postproc/new_postproc5/infil_7_890_rain/text", "proc 5\n(no stone)"),
 ]
 
 TIMESTEPS   = [49, 90, 275, 357]
