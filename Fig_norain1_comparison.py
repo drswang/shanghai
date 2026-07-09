@@ -1,10 +1,12 @@
 """
-5 rows × 4 columns comparison.
-  Row 1: proc 1  (new_postproc1/infil_7_890_rain)
-  Row 2: proc 2  (new_postproc2/infil_7_890_rain)
-  Row 3: proc 3  (new_postproc3/infil_7_890_rain)
-  Row 4: proc 4  (new_postproc4/infil_7_890_rain)
-  Row 5: proc 5  — no stone  (new_postproc5/infil_7_890_rain)
+5 rows × 4 columns comparison. Rows in logical scenario order.
+Scenario→folder mapping confirmed by wet-cell divergence timing + superposition
+(proc2 + proc3 - ctrl ≈ proc4, mean |resid| = 13 wet cells):
+  Row 1: ctrl             (new_postproc1/infil_7_890_rain)
+  Row 2: no rain #1       (new_postproc3/infil_7_890_rain)  # diverges ~Aug 20 (early)
+  Row 3: no rain #2       (new_postproc2/infil_7_890_rain)  # diverges ~Aug 27 (late)
+  Row 4: no rain #1 & #2  (new_postproc4/infil_7_890_rain)
+  Row 5: stone→earth dike (new_postproc5/infil_7_890_rain)
 
 Timesteps (verified against original fig files by depth correlation):
   t49  → Predecessor Rain #1  (Aug 21 00:00)
@@ -35,11 +37,11 @@ RIVER_DIR  = f"{BASE}/市管河道/"
 RIVER_MASK = f"{BASE}/river_mask.xyz"
 
 SCENARIOS = [
-    (f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text", "proc 1"),
-    (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "proc 2"),
-    (f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text", "proc 3"),
-    (f"{BASE}/postproc/new_postproc4/infil_7_890_rain/text", "proc 4"),
-    (f"{BASE}/postproc/new_postproc5/infil_7_890_rain/text", "proc 5\n(no stone)"),
+    (f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text", "ctrl"),
+    (f"{BASE}/postproc/new_postproc3/infil_7_890_rain/text", "no rain #1"),
+    (f"{BASE}/postproc/new_postproc2/infil_7_890_rain/text", "no rain #2"),
+    (f"{BASE}/postproc/new_postproc4/infil_7_890_rain/text", "no rain #1 & #2"),
+    (f"{BASE}/postproc/new_postproc5/infil_7_890_rain/text", "stone→earth\ndike"),
 ]
 
 TIMESTEPS   = [49, 90, 275, 357]

@@ -28,7 +28,8 @@ shanghai/
 │   ├── new_postproc1/          # proc 1 — ctrl (baseline)
 │   ├── new_postproc2/          # proc 2 — no rain #2
 │   ├── new_postproc3/          # proc 3 — no rain #1
-│   └── new_postproc4/          # proc 4 — no rain #1 + #2
+│   ├── new_postproc4/          # proc 4 — no rain #1 + #2
+│   └── new_postproc5/          # proc 5 — stone → earth dike
 ├── map/                        # Geographic data
 │   └── 1910map/shape/          # Historical shapefiles
 ├── 市管河道/                    # Current river network shapefiles
@@ -53,9 +54,10 @@ Each `new_postproc{N}` folder contains multiple experiment sub-folders; **always
 | Folder | Label | Scenario | Notes |
 |--------|-------|----------|-------|
 | `new_postproc1/infil_7_890_rain/` | proc 1 | ctrl (baseline) | Confirmed matches old ctrl pattern |
-| `new_postproc2/infil_7_890_rain/` | proc 2 | no rain #2 | Inferred from divergence timing (~Aug 27); **10 empty files t312–t321** (Sep 1 00:00–09:00) — needs re-delivery from model operator |
-| `new_postproc3/infil_7_890_rain/` | proc 3 | no rain #1 | Inferred from divergence timing (~Aug 20–21); complete |
-| `new_postproc4/infil_7_890_rain/` | proc 4 | no rain #1 + #2 | Inferred: matches proc 3 early, proc 2 late; complete |
+| `new_postproc2/infil_7_890_rain/` | proc 2 | no rain #2 | Confirmed: diverges ~Aug 27 (late); t312–t321 gap now filled, complete |
+| `new_postproc3/infil_7_890_rain/` | proc 3 | no rain #1 | Confirmed: diverges ~Aug 20 (early); complete |
+| `new_postproc4/infil_7_890_rain/` | proc 4 | no rain #1 + #2 | Confirmed via superposition (proc2+proc3-ctrl≈proc4, resid≈13 cells); complete |
+| `new_postproc5/infil_7_890_rain/` | proc 5 | stone → earth dike | Confirmed: recovers to ≈ctrl by Sep 2, not a rain scenario; complete |
 
 ## Running the Project
 
@@ -103,33 +105,35 @@ geopandas pandas numpy xarray matplotlib contextily shapely pyproj scipy ffmpeg
 | Folder | Label | Scenario | Status |
 |--------|-------|----------|--------|
 | `new_postproc1` | proc 1 | ctrl | Complete |
-| `new_postproc2` | proc 2 | no rain #2 | 10 empty files t312–t321 |
+| `new_postproc2` | proc 2 | no rain #2 | Complete (t312–t321 gap filled) |
 | `new_postproc3` | proc 3 | no rain #1 | Complete |
 | `new_postproc4` | proc 4 | no rain #1 + #2 | Complete |
+| `new_postproc5` | proc 5 | stone → earth dike | Complete |
 
-## Current Status (as of 2026-05-13)
+## Current Status (as of 2026-07-09)
 
 ### Completed
-- All 4 proc scenarios delivered and file-checked (all `infil_7_890_rain` folders have 358 files except proc2 t312–t321)
-- Scenario labels inferred from divergence timing analysis (needs operator confirmation)
-- `Fig_norain1_comparison.png` — 4 rows (proc 1/2/3/4), 4 snapshot columns
+- All 5 proc scenarios delivered and file-checked — every `infil_7_890_rain` folder has 358 non-empty files (proc 2 t312–t321 gap now filled)
+- **Scenario labels confirmed by data analysis** (wet-cell divergence timing + superposition test); proc→scenario mapping settled
+- `Fig_norain1_comparison.png` — 5 rows in logical order (ctrl, no rain #1, no rain #2, no rain #1&2, stone→earth dike), 4 snapshot columns
 - `Fig_Diff_new.png` — 3-panel difference maps: No Rain #1, No Rain #2, No Rain #1+2 vs ctrl
 - `Fig_Overview_maps_new.png` — 2×2 ctrl (proc 1) snapshots at t49/t90/t275/t357
+- Local figure environment set up on this machine (`~/anaconda3/bin/python` + GADM); GitHub remote switched to SSH
 
-### Scenario characterization (based on flooded-area time series analysis)
+### Scenario characterization (confirmed via wet-cell time series; t1 ≈ Aug 19 00:00)
 
 | Label | Scenario | Diverges from ctrl | Character |
 |-------|----------|--------------------|-----------|
 | proc 1 | ctrl | — | reference |
-| proc 2 | no rain #2 | ~Aug 27 04:00 | Identical to ctrl until Aug 27, then fewer wet cells; 10-hr data gap Sep 1 |
-| proc 3 | no rain #1 | ~Aug 20–21 | ~300–450 fewer wet cells throughout, otherwise similar to ctrl |
-| proc 4 | no rain #1+2 | ~Aug 20–21 | Matches proc 3 early, tracks proc 2 after Aug 27 |
+| proc 2 | no rain #2 | ~Aug 27 04:00 (t197) | Identical to ctrl until Aug 27, then fewer wet cells (end Δ ≈ −2675) |
+| proc 3 | no rain #1 | ~Aug 20 (t24) | Early divergence, effect fades by Sep 2 (end Δ ≈ −423) |
+| proc 4 | no rain #1+2 | ~Aug 20 (t24) | Deepest deficit; equals proc2+proc3 effect (superposition resid ≈ 13 cells) |
+| proc 5 | stone → earth dike | ~Aug 20 (t24) | Diverges then recovers to ≈ctrl by Sep 2 (end Δ ≈ −137); structural, not rain |
 
-Scenario labels are **inferred, not yet confirmed** by model operator. Proc 2 t312–t321 gap also needs re-delivery.
+Labels are **data-confirmed**. They match the earlier timing inference and are the opposite of naive folder-order reading of the scenario list.
 
 ### Outstanding issues
-- Confirm scenario labels for proc 2, 3, 4 with model operator
-- Request re-delivery of proc 2 `infil_7_890_rain` t312–t321 (empty files)
+- (none blocking) — scenario labels resolved; all files complete
 
 ## Output Products
 
@@ -140,7 +144,7 @@ Scenario labels are **inferred, not yet confirmed** by model operator. Proc 2 t3
 - `Shanghai_1905_flood_movie.mp4` — Animated flood propagation
 
 ### New experiments (`postproc/`)
-- `Fig_norain1_comparison.png` — 4×4 snapshot grid (proc 1–4 rows, 4 timestep columns)
+- `Fig_norain1_comparison.png` — 5×4 snapshot grid (rows: ctrl, no rain #1, no rain #2, no rain #1&2, stone→earth dike; 4 timestep columns)
 - `Fig_Overview_maps_new.png` — 2×2 ctrl (proc 1) snapshots at t49/t90/t275/t357
 - `Fig_Diff_new.png` — 3-panel difference maps: No Rain #1, No Rain #2, No Rain #1+2 vs ctrl
 - `Fig_norain1_comparison.py` — script for comparison figure
