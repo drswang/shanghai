@@ -41,7 +41,8 @@ rain_clim = rain_subset[rain_subset["Year"] != 1905]
 
 # ── Figure ──────────────────────────────────────────────────────────────────
 plt.rcParams.update({"font.size": 8})
-fig, ax1 = plt.subplots(figsize=(7, 3.2), dpi=600)
+# match the manuscript figure dimensions (image2.pdf = 462.845 x 182.479 pt)
+fig, ax1 = plt.subplots(figsize=(6.428, 2.534), dpi=600)
 
 ## ax1: Bar plot of 1905 rainfall with non-parametric return level shading
 
