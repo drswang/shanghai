@@ -97,9 +97,12 @@ tick_dates = pd.date_range("1905-08-20", "1905-09-03")
 ax1.set_xticks(tick_dates)
 ax1.set_xticklabels([d.strftime("%m/%d") for d in tick_dates], rotation=45)
 
-# ── Tide / water level ──────────────────────────────────────────────────────
-tide_df = pd.read_csv(f"{BASE}/wusongkou.csv")
-tide_df.columns = tide_df.columns.str.strip()  # Remove any whitespace in headers
+# ── Water level (red line): NEW control simulation at Wusongkou ─────────────
+wl_df = pd.read_csv(f"{BASE}/wusongkou_simulated_ctrl.csv")
+wl_df["datetime"] = pd.to_datetime(wl_df["datetime"])
+wl_df["depth_m"] = wl_df["water_depth_m"]
+tide_mask = (wl_df["datetime"] >= "1905-08-20") & (wl_df["datetime"] <= "1905-09-02 21:00")
+tide_plot = wl_df.loc[tide_mask]
 
 
 def fix_year(d):
@@ -108,16 +111,6 @@ def fix_year(d):
     if len(date_parts[2]) == 2:
         date_parts[2] = '19' + date_parts[2]
     return '/'.join(date_parts) + ' ' + parts[1]
-
-
-# Apply to the date column
-tide_df["fixed_date"] = tide_df["date and time"].apply(fix_year)
-
-# Now safely parse as datetime
-tide_df["datetime"] = pd.to_datetime(tide_df["fixed_date"], format="%m/%d/%Y %H:%M")
-tide_df["depth_m"] = tide_df["water depth (points) (m)"]
-tide_mask = (tide_df["datetime"] >= "1905-08-20") & (tide_df["datetime"] <= "1905-09-02 21:00")
-tide_plot = tide_df.loc[tide_mask]
 
 tide_df = pd.read_csv(f"{BASE}/Wusong_tide_modeling_19050801-19050916.csv")
 tide_df.columns = tide_df.columns.str.strip()  # Remove any whitespace in headers

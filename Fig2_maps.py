@@ -33,10 +33,13 @@ plt.rcParams.update({"font.size": 8})
 BASE = "/Users/shuaiwang/sandbox/shanghai"
 shape_dir = f"{BASE}/map/1910map/shape"
 gadm_path = "/Users/shuaiwang/sandbox/data/borders/gadm36.shp"
-depth_csv_path = f"{BASE}/update2/fig124a3d.csv"   # (d) after typhoon
-xyz1_path = f"{BASE}/update2/fig3a.xyz"            # (a) after rain #1
-xyz2_path = f"{BASE}/update2/fig3b.xyz"            # (b) after rain #2
-xyz3_path = f"{BASE}/update2/fig3c.xyz"            # (c) before typhoon
+# NEW simulation control run (new_postproc1). Timesteps matched to the old
+# figure snapshots (fig3a=t73, fig3b=t241, fig3c=t313, fig124a3d=t358).
+NEWCTRL = f"{BASE}/postproc/new_postproc1/infil_7_890_rain/text"
+depth_csv_path = f"{NEWCTRL}/t358.xyz"   # (d) after typhoon  (Sep 2)
+xyz1_path = f"{NEWCTRL}/t73.xyz"         # (a) after rain #1  (Aug 22 00:00)
+xyz2_path = f"{NEWCTRL}/t241.xyz"        # (b) after rain #2  (Aug 29 00:00)
+xyz3_path = f"{NEWCTRL}/t313.xyz"        # (c) before typhoon (Sep 1)
 river_mask_path = f"{BASE}/river_mask.xyz"
 river_dir = f"{BASE}/市管河道/"
 
@@ -70,7 +73,7 @@ inland_border = gpd.overlay(shanghai_boundary, china_other_boundary, how="inters
 river_mask_df = pd.read_csv(river_mask_path, sep=r'\s+', header=None, names=["lon", "lat", "depth"])
 river_coords = set(zip(river_mask_df["lon"], river_mask_df["lat"]))
 
-depth_df = pd.read_csv(depth_csv_path, header=None, names=["lon", "lat", "depth"])
+depth_df = pd.read_csv(depth_csv_path, sep=r'\s+', header=None, names=["lon", "lat", "depth"])
 depth_df = depth_df[~depth_df[["lon", "lat"]].apply(tuple, axis=1).isin(river_coords)]
 depth_gdf = gpd.GeoDataFrame(depth_df, geometry=gpd.points_from_xy(depth_df.lon, depth_df.lat), crs="EPSG:4326")
 
