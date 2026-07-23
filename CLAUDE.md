@@ -29,7 +29,8 @@ shanghai/
 │   ├── new_postproc2/          # proc 2 — no rain #2
 │   ├── new_postproc3/          # proc 3 — no rain #1
 │   ├── new_postproc4/          # proc 4 — no rain #1 + #2
-│   └── new_postproc5/          # proc 5 — stone → earth dike
+│   ├── new_postproc5/          # proc 5 — stone → earth dike
+│   └── new_postproc6/          # proc 6 — neap tide
 ├── map/                        # Geographic data
 │   └── 1910map/shape/          # Historical shapefiles
 ├── 市管河道/                    # Current river network shapefiles
@@ -109,6 +110,7 @@ geopandas pandas numpy xarray matplotlib contextily shapely pyproj scipy ffmpeg
 | `new_postproc3` | proc 3 | no rain #1 | Complete |
 | `new_postproc4` | proc 4 | no rain #1 + #2 | Complete |
 | `new_postproc5` | proc 5 | stone → earth dike | Complete |
+| `new_postproc6` | proc 6 | neap tide | Complete (delivered 2026-07-23) |
 
 ## Current Status (as of 2026-07-09)
 
