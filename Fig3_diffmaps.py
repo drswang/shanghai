@@ -5,7 +5,7 @@ experiments, at the post-typhoon peak (t358):
   (a) No Rain #1   (proc3 - proc1)
   (b) No Rain #2   (proc2 - proc1)
   (c) No Rain #1&2 (proc4 - proc1)      <- added simulation
-  (d) Neap Tide    (old low-tide - new proc1 control; new neap sim pending)
+  (d) Neap Tide    (proc6 - proc1)
   (e) Stone -> Earthen embankment (proc5 - proc1)
 
 Based on Fig_Diff_new.py (same method: coastline/river filtering, common-mesh
@@ -45,7 +45,7 @@ NORAIN1_PATH  = f"{NEW}/new_postproc3/infil_7_890_rain/text/t{T}.xyz"  # proc3
 NORAIN2_PATH  = f"{NEW}/new_postproc2/infil_7_890_rain/text/t{T}.xyz"  # proc2
 NORAIN12_PATH = f"{NEW}/new_postproc4/infil_7_890_rain/text/t{T}.xyz"  # proc4
 STONE_PATH    = f"{NEW}/new_postproc5/infil_7_890_rain/text/t{T}.xyz"  # proc5
-NEAP_PATH     = f"{BASE}/update2/lowtide/text/t{T}.xyz"                # old low-tide (new neap pending)
+NEAP_PATH     = f"{NEW}/new_postproc6/infil_7_890_rain/text/t{T}.xyz"  # proc6 (new neap-tide run)
 
 # ── Static layers ──────────────────────────────────────────────────────────
 print("Loading static layers…")

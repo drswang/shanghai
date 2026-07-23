@@ -46,8 +46,7 @@ SCENARIOS = {
     "No rain #1":   f"{NEW}/new_postproc3/infil_7_890_rain/text/t{T}.xyz",
     "No rain #2":   f"{NEW}/new_postproc2/infil_7_890_rain/text/t{T}.xyz",
     "No rain #1&2": f"{NEW}/new_postproc4/infil_7_890_rain/text/t{T}.xyz",
-    # neap: old low-tide run vs the NEW control (a new neap sim is pending)
-    "Neap tide":    f"{BASE}/update2/lowtide/text/t{T}.xyz",
+    "Neap tide":    f"{NEW}/new_postproc6/infil_7_890_rain/text/t{T}.xyz",  # new neap-tide run
     "No stone emb.": f"{NEW}/new_postproc5/infil_7_890_rain/text/t{T}.xyz",
 }
 
@@ -148,7 +147,7 @@ def main():
         rows["95th-pct increase (m)"][name] = (
             f"{s['p95_inc']:.2f}" if s["inc_pct"] >= AREA_THRESHOLD * 100 else "---")
     df = pd.DataFrame(rows).T[cols]
-    print(f"\nTable 1 (t = {T}; neap = old low-tide vs new control)\n")
+    print(f"\nTable 1 (t = {T}; neap = new neap-tide run)\n")
     print(df.to_string())
     return df
 
